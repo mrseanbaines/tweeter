@@ -10,7 +10,8 @@ function post(e) {
   const text = this.querySelector('#input').value;
   const tweet = {
     message: text,
-    timeStamp: new Date().toUTCString()
+    timeStamp: new Date().toUTCString(),
+    likes: 0
   };
   if (tweet.message !== '') {
     tweets.unshift(tweet);
@@ -34,6 +35,9 @@ function updateTweets(tweet, text) {
           <small>
             ${item.timeStamp}
           </small>
+          <br>
+          <i data-index=${i} class="fa fa-heart ${item.likes > 0 ? 'text-danger' : ''}" aria-hidden="true"></i>
+          ${item.likes}
         </span>
       </li>
     `
@@ -59,6 +63,15 @@ function remove(e) {
   }
 }
 
+function like(e) {
+  if (e.target.matches('.fa-heart')) {
+    const index = e.target.dataset.index;
+    tweets[index].likes++;
+    updateTweets();
+  }
+}
+
 input.addEventListener('input', inputChange);
 form.addEventListener('submit', post);
 tweetList.addEventListener('click', remove);
+tweetList.addEventListener('click', like);

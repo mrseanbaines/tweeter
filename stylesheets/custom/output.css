@@ -6353,7 +6353,8 @@ a.text-dark:focus, a.text-dark:hover {
 .invisible {
   visibility: hidden !important; }
 
-.close {
+.close,
+.fa-heart::before {
   cursor: pointer; }
 
 .form-control:focus {
