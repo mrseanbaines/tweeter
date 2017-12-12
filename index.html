@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" class="h-100">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tweeter</title>
+  <link rel="stylesheet" href="./stylesheets/custom/output.css">
+</head>
+<body class="bg-light p-3 h-100">
+  <div class="container h-100">
+    <div class="row h-100">
+      <div class="col-12 col-md-3 h-100"></div>
+      <div class="col-12 col-md-6 bg-white p-3 rounded h-100">
+        <form id="form" autocomplete="off">
+          <div class="form-group">
+            <div class="input-group">
+              <input id="input" type="text" placeholder="Try typing something..." class="form-control">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="submit">Post!</button>
+              </span>
+            </div>
+            <div class="err-no-text alert alert-primary mt-3" role="alert">
+              Don't forget your message!
+            </div>
+          </div>
+        </form>
+        <ul id="tweet-list" class="list-group">
+          <!-- Populated by JS -->
+        </ul>
+      </div>
+      <div class="col-12 col-md-3 h-100"></div>
+    </div>
+  </div>
+
+  <script src="./javascripts/main.js"></script>
+</body>
+</html>
