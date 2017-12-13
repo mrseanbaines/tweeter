@@ -1,5 +1,8 @@
 ## Tweeter
 A Twitter-like clone for JavaScript practice
 
-##### Run Sass watch task:
+###### Navigate to stylesheets/custom/ directory:
+`cd stylesheets/custom/`
+
+###### Run Sass watch task:
 `sass --watch app.scss:output.css`
