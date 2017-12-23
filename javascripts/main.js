@@ -1,5 +1,8 @@
 const tweets = [];
 
+const database = firebase.database();
+const dbRefObject = database.ref().child('tweets');
+
 const form = document.querySelector('#form');
 const tweetList = document.querySelector('#tweet-list');
 const input = document.querySelector('#input');
@@ -14,15 +17,14 @@ function post(e) {
     likes: 0
   };
   if (tweet.message !== '') {
-    tweets.unshift(tweet);
-    updateTweets(tweet, text);
+    dbRefObject.push(tweet);
     this.reset();
   } else {
     errNoTextFunc(text);
   }
 }
 
-function updateTweets(tweet, text) {
+function updateTweets() {
   tweetList.innerHTML = tweets.map(function(item, i) {
     return`
       <li class="list-group-item list-group-item-action">
@@ -77,9 +79,6 @@ tweetList.addEventListener('click', remove);
 tweetList.addEventListener('click', like);
 
 (function() {
-  const database = firebase.database();
-  const dbRefObject = database.ref().child('tweets');
-
   dbRefObject.on('value', function(snap) {
     var object = snap.val();
     for (var item in object) {
