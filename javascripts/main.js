@@ -1,4 +1,4 @@
-const tweets = [];
+var tweets = [];
 
 const database = firebase.database();
 const dbRefObject = database.ref().child('tweets');
@@ -81,11 +81,12 @@ tweetList.addEventListener('click', like);
 (function() {
   dbRefObject.on('value', function(snap) {
     var object = snap.val();
+    var updatedTweets = [];
     for (var item in object) {
       var tweet = object[item];
-      tweets.push(tweet);
+      updatedTweets.push(tweet);
     }
-    console.log(tweets);
+    tweets = updatedTweets;
     updateTweets();
   });
 }());
