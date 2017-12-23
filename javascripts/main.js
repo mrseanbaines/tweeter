@@ -1,17 +1,17 @@
 var tweets = [];
 
-const database = firebase.database();
-const dbRefObject = database.ref().child('tweets');
+var database = firebase.database();
+var dbRefObject = database.ref().child('tweets');
 
-const form = document.querySelector('#form');
-const tweetList = document.querySelector('#tweet-list');
-const input = document.querySelector('#input');
+var form = document.querySelector('#form');
+var tweetList = document.querySelector('#tweet-list');
+var input = document.querySelector('#input');
 var errNoText = false;
 
 function post(e) {
   e.preventDefault();
-  const text = this.querySelector('#input').value;
-  const tweet = {
+  var text = this.querySelector('#input').value;
+  var tweet = {
     message: text,
     timeStamp: new Date().toUTCString(),
     likes: 0
@@ -59,7 +59,7 @@ function inputChange(text) {
 
 function remove(e) {
   if (e.target.matches('.close span')) {
-    const index = e.target.dataset.index;
+    var index = e.target.dataset.index;
     tweets.splice(index, 1);
     updateTweets();
   }
@@ -67,7 +67,7 @@ function remove(e) {
 
 function like(e) {
   if (e.target.matches('.fa-heart')) {
-    const index = e.target.dataset.index;
+    var index = e.target.dataset.index;
     tweets[index].likes++;
     updateTweets();
   }
