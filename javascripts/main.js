@@ -75,3 +75,18 @@ input.addEventListener('input', inputChange);
 form.addEventListener('submit', post);
 tweetList.addEventListener('click', remove);
 tweetList.addEventListener('click', like);
+
+(function() {
+  const database = firebase.database();
+  const dbRefObject = database.ref().child('tweets');
+
+  dbRefObject.on('value', function(snap) {
+    var object = snap.val();
+    for (var item in object) {
+      var tweet = object[item];
+      tweets.push(tweet);
+    }
+    console.log(tweets);
+    updateTweets();
+  });
+}());
