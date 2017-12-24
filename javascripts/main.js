@@ -1,28 +1,27 @@
-const tweets = [];
-
-const form = document.querySelector('#form');
-const tweetList = document.querySelector('#tweet-list');
-const input = document.querySelector('#input');
+var tweets = [];
+var dbRefObject = firebase.database().ref('tweets');
+var form = document.querySelector('#form');
+var tweetList = document.querySelector('#tweet-list');
+var input = document.querySelector('#input');
 var errNoText = false;
 
 function post(e) {
   e.preventDefault();
-  const text = this.querySelector('#input').value;
-  const tweet = {
+  var text = this.querySelector('#input').value;
+  var tweet = {
     message: text,
     timeStamp: new Date().toUTCString(),
     likes: 0
   };
   if (tweet.message !== '') {
-    tweets.unshift(tweet);
-    updateTweets(tweet, text);
+    dbRefObject.push(tweet);
     this.reset();
   } else {
     errNoTextFunc(text);
   }
 }
 
-function updateTweets(tweet, text) {
+function updateTweets() {
   tweetList.innerHTML = tweets.map(function(item, i) {
     return`
       <li class="list-group-item list-group-item-action">
@@ -57,17 +56,27 @@ function inputChange(text) {
 
 function remove(e) {
   if (e.target.matches('.close span')) {
-    const index = e.target.dataset.index;
-    tweets.splice(index, 1);
-    updateTweets();
+    dbRefObject.once("value").then(function(snap) {
+      var index = e.target.dataset.index;
+      var obj = snap.val();
+      var keysArr = Object.keys(obj);
+      dbRefObject.child(keysArr[index]).remove();
+    });
   }
 }
 
 function like(e) {
   if (e.target.matches('.fa-heart')) {
-    const index = e.target.dataset.index;
-    tweets[index].likes++;
-    updateTweets();
+    var index = e.target.dataset.index;
+    var newLikes = tweets[index].likes;
+    newLikes++;
+    dbRefObject.once("value").then(function(snap) {
+      var obj = snap.val();
+      var keysArr = Object.keys(obj);
+      dbRefObject.child(keysArr[index]).update({
+        likes: newLikes
+      });
+    });
   }
 }
 
@@ -75,3 +84,17 @@ input.addEventListener('input', inputChange);
 form.addEventListener('submit', post);
 tweetList.addEventListener('click', remove);
 tweetList.addEventListener('click', like);
+
+// Watch for changes in db and update tweet list
+(function() {
+  dbRefObject.on('value', function(snap) {
+    var obj = snap.val();
+    var updatedTweets = [];
+    for (var item in obj) {
+      var tweet = obj[item];
+      updatedTweets.push(tweet);
+    }
+    tweets = updatedTweets;
+    updateTweets();
+  });
+}());
