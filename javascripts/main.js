@@ -68,8 +68,15 @@ function remove(e) {
 function like(e) {
   if (e.target.matches('.fa-heart')) {
     var index = e.target.dataset.index;
-    tweets[index].likes++;
-    updateTweets();
+    var newLikes = tweets[index].likes;
+    newLikes++;
+    dbRefObject.once("value").then(function(snap) {
+      var obj = snap.val();
+      var keysArr = Object.keys(obj);
+      dbRefObject.child(keysArr[index]).update({
+        likes: newLikes
+      });
+    });
   }
 }
 
