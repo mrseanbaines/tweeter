@@ -1,8 +1,5 @@
 var tweets = [];
-
-var database = firebase.database();
-var dbRefObject = database.ref().child('tweets');
-
+var dbRefObject = firebase.database().ref('tweets');
 var form = document.querySelector('#form');
 var tweetList = document.querySelector('#tweet-list');
 var input = document.querySelector('#input');
@@ -59,9 +56,12 @@ function inputChange(text) {
 
 function remove(e) {
   if (e.target.matches('.close span')) {
-    var index = e.target.dataset.index;
-    tweets.splice(index, 1);
-    updateTweets();
+    dbRefObject.once("value").then(function(snap) {
+      var index = e.target.dataset.index;
+      var obj = snap.val();
+      var keysArr = Object.keys(obj);
+      dbRefObject.child(keysArr[index]).remove();
+    });
   }
 }
 
@@ -78,12 +78,13 @@ form.addEventListener('submit', post);
 tweetList.addEventListener('click', remove);
 tweetList.addEventListener('click', like);
 
+// Watch for changes in db and update tweet list
 (function() {
   dbRefObject.on('value', function(snap) {
-    var object = snap.val();
+    var obj = snap.val();
     var updatedTweets = [];
-    for (var item in object) {
-      var tweet = object[item];
+    for (var item in obj) {
+      var tweet = obj[item];
       updatedTweets.push(tweet);
     }
     tweets = updatedTweets;
